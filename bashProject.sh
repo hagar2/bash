@@ -20,7 +20,7 @@ while true ; do
 	read -p $' Choose the type 
        		
 		f- File.
-		d- Directory. ' Type
+		d- Directory. \n' Type
 	Type=${Type,,}
 	if [[ $Type =~ ^[fd]+$ ]]; then
 		return 0
@@ -33,7 +33,7 @@ done
 function confirmation(){
 	read -p $'Are you sure you want to do this operation
 		    1- Yes
-		    2- NO ' ans
+		    2- NO \n' ans
 	if [[ $ans -eq 1 ]]; then
 		return 0
 	elif [[ $ans -eq 2 ]]; then
@@ -45,7 +45,7 @@ function confirmation(){
 }
 function checkPath(){
 	if [[ ! -e "$path" ]]; then
-		read -p 'please enter a correct path' path
+		read -p $'please enter a correct path\n' path
 		checkpath
 	else 
 
@@ -55,7 +55,7 @@ function checkPath(){
 }
 function checkExistance(){
 	read -p $'Enter the name of file/directory you want to do the operation on 
-		( file extention is required if the type is file )' name
+		( file extention is required if the type is file )\n' name
 	if [[ ! -e "$name"  ]]; then
 	       echo "File/Directory does not exist. please try again"
 	       checkExistance
@@ -81,7 +81,7 @@ function checkNum (){
 	if [[ $funOp =~ ^[$num1-$num2]+$ ]]; then
 		return 0
 	else 
-		read -p $'Please enter a valid option between ${num1} to ${num2}' funOp
+		read -p $'Please enter a valid option between ${num1} to ${num2}\n' funOp
 		return 0
 	fi
 }
@@ -135,7 +135,7 @@ function system_monitoring(){
 		 2- CPU usage monitoring.
 		 3- Memory usage monitoring.
 		 4- Disk space monitoring.
-		 5- main menu ' sysOp
+		 5- main menu \n' sysOp
 	checkNum "$sysOp" "1" "5"
 	sysOp="$funOp"
 	case $sysOp in 
@@ -158,7 +158,7 @@ function system_monitoring(){
 
 function backup (){
 	checkExistance
-	read -p $'Enter the name of the backup with .tar extension ' Bname
+	read -p $'Enter the name of the backup with .tar extension   \n' Bname
 	if [[ "$Bname" == *.tar ]]; then
 		tar -czvf "$Bname" "$name"
 		checkProcess
@@ -170,12 +170,12 @@ function backup (){
 }
 
 function restore(){
-	read -p $'Enter the backup name to restore with .tar extension' Rname
+	read -p $'Enter the backup name to restore with .tar extension  \n ' Rname
 	if [[ ! "$Rname" == *.tar ]]; then
 		echo "No such backup found "
 		restore
 	else	
-		read -p $'Enter the destination to restore the files in' path
+		read -p $'Enter the destination to restore the files in \n' path
 		checkPath
 		tar -xzvf "$Rname" -C "$path"
 		checkProcess
@@ -188,7 +188,7 @@ function backup_restore(){
 	read -p $'Welcome to backup and restoring section !.Enter your choice 
 		1- Backup
 		2- Restore
-	        3- Return to the main menu ' BRop
+	        3- Return to the main menu \n' BRop
 	checkNum "$BRop" "1" "3"
 	BRop="$funOp"
 	case $BRop in 
@@ -222,27 +222,26 @@ function search (){
 		3- Search by file type
 		4- Search by file extension
 		5- Search by modification time	
-		6- Return to the main menu 
-		' searchOp
+		6- Return to the main menu \n' searchOp
 
 	checkNum "$searchOp" "1" "6"
 	searchOp="$funOp"
 	if [[ $searchOp -eq 6 ]];then
 		main
 	fi
-	read -p $'Enter the search path ' path
+	read -p $'Enter the search path \n' path
 	checkPath
 	echo ""
 	case $searchOp in 
 		
 		1)
-			read -p $'Enter file name' fileName
+			read -p $'Enter file name\n' fileName
 			result=$(find "$path" -name "$fileName" 2>/dev/null)
 			;;
 		2)
 			read -p $'Enter file size criteria ( +100M for files larger than 100MB , -50k for files smaller than 50KB ,
 		                                        	60G for files exactly with size 60GB )
-			         [+/- / ] [k/M/G] size options are required' fileSize
+			         [+/- / ] [k/M/G] size options are required \n' fileSize
 			result=$(find "$path" -size "$fileSize" 2>/dev/null)
 			;;
 		3)	
@@ -250,14 +249,14 @@ function search (){
 			result=$(find "$path" -type "$Type" 2>/dev/null)
 			;;
 		4)
-			read -p $'Enter file extension (e.g , *.txt , *.sh ...)' fileExt
+			read -p $'Enter file extension (e.g , *.txt , *.sh ...)\n' fileExt
 			result=$(find "$path" -name "$fileExt" 2>/dev/null)
 			;;
 		5)
 			read -p $'Enter modification time (-7 for files modified withen last 7 days ago
 		       					  +5 for filed modified more than 5 days ago
 							  9 for files modified exactly 9 days ago  )
-				[+/-/ ] [number] modification options are required ) ' fileMod
+				[+/-/ ] [number] modification options are required ) \n' fileMod
 		        result=$(find "$path" -mtime "$fileMod" 2>/dev/null)
 			
 	esac	
@@ -270,7 +269,7 @@ function permission (){
        		please choose an option to continue.
 			1- Change file/directory permissions
 			2- change file/directory ownership
-			3- Return to the main menu' chOption
+			3- Return to the main menu \n' chOption
 			checkNum "$chOption" "1" "3"
 			chOption="$funOp"
 			case $chOption in 
@@ -289,15 +288,14 @@ function chMod(){
 		read -p $'Choose a permisson mode 
 				1- Symbolic mode (e.g, rwx )
 				2- Numeric octal notation (e.g, 755 )
-				3- Back to permission managment menu	
-				' pMod
+				3- Back to permission managment menu \n' pMod
 		checkNum "$pMod" "1" "2"
 		pMod="$funOp"
 		checkExistance
 		case $pMod in 	
 			1)
 				read -p $'Enter the new permessions in Symbols for user , group and others
-				(e.g, r= read w = write x= execute ==> u=rwx,g=wx,o=rw )' perOp
+				(e.g, r= read w = write x= execute ==> u=rwx,g=wx,o=rw )\n' perOp
 				if [[ $perOp =~ ^([ugo]*[+-=]([rwx]*,?)*,?)*$ ]]; then
 					sudo chmod "$perOp" "$name"
 					checkProcess
@@ -309,7 +307,7 @@ function chMod(){
 
 			2)
 				read -p $'Enter the new permissions in octal notaion 
-				 read = 4 , write = 2 , execute = 1 (e.g, 755 ==>rwxr-xr-x)' perOp
+				 read = 4 , write = 2 , execute = 1 (e.g, 755 ==>rwxr-xr-x) \n' perOp
 				if [[ $perOp =~ ^[0-9]+$ ]];then
 					 sudo chmod "$perOp" "$name"
 					 checkProcess
@@ -325,7 +323,7 @@ function chMod(){
 		 esac
 }
 function checkUser(){
-	read -p $'Enter the name of the new owner ' owner
+	read -p $'Enter the name of the new owner \n' owner
 	if id "$owner" &>/dev/null ; then
 		return 0
 	else
@@ -334,7 +332,7 @@ function checkUser(){
 	fi
 }
 function checkGroup(){
-	read -p $'Enter the name of the new group ' group
+	read -p $'Enter the name of the new group \n' group
 	if getent group "$group" &>/dev/null ; then
 		return 0
 	else 
@@ -348,8 +346,7 @@ function chOwn() {
 			1- Change User ownership only.
 			2- Change Group ownership only.
 			3- Change user and group ownership.
-		        4- Return to permissions management
-			' ownOp
+		        4- Return to permissions management \n' ownOp
 		checkNum "$ownOp" "1" "4" 
 		ownOp="$funOp"
 		checkExistance
@@ -387,7 +384,7 @@ function delete (){
 
 function rename (){
 	checkExistance
-	read -p $'Enter the new name' newName
+	read -p $'Enter the new name \n' newName
 	confirmation
 	mv "$name" "$newName"
 	checkProcess
@@ -396,7 +393,7 @@ function rename (){
 
 function move (){
 	checkExistance
-	read -p $'Enter the destination ' path
+	read -p $'Enter the destination \n' path
 	checkPath
 	mv "$name" "$path"
         checkProcess
@@ -406,7 +403,7 @@ function move (){
 function copy () {
 	getType
 	checkExistance 
-	read -p $'Enter the name of copied file/directory  ' cpdName
+	read -p $'Enter the name of copied file/directory \n ' cpdName
 	if [[ $Type -eq "f" ]]; then
 		cp "$name" "$cpdName"
 	else
@@ -418,8 +415,8 @@ function copy () {
 function create (){
 
 	getType
-	read -p $'Enter the name ( file extension is required in case of creating files ) ' name
-	read -p $'Enter the target location' path
+	read -p $'Enter the name ( file extension is required in case of creating files ) \n' name
+	read -p $'Enter the target location \n' path
 	checkPath
 	if [[ $Type -eq "f" ]]; then
 		touch "$path/$name"
@@ -439,7 +436,7 @@ function operation (){
 		3- Move file/directory
 		4- Rename file/directory
 		5- Delete file/directory
-		6- Return to the main menu' opChoice
+		6- Return to the main menu \n' opChoice
 	checkNum "$opChoice" "1" "6"
 	opChoice="$funOp"
 		case $opChoice in 
@@ -471,7 +468,7 @@ function fileManagement () {
 		 2- file searching
 		 3- backup or restore
 		 4- permission management
-		 5- Retrun to the main menu ' serviceOp
+		 5- Retrun to the main menu \n' serviceOp
 	checkNum "$serviceOp" "1" "5"
 	serviceOp="$funOp"
 		case $serviceOp in 
